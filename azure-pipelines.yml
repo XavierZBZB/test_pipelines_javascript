@@ -59,8 +59,8 @@ steps:
     echo "Agent.MachineName = $(Agent.MachineName)"
     echo "Build.Repository.Uri = $(Build.Repository.Uri)"
     echo "Build.RequestedForId = $(Build.RequestedForId)"
-    echo "Build.SourceBranch" = $(Build.SourceBranch)"
-    echo "Build.DefinitionName'\'\'\'' = $(Build.DefinitionName)"
+    echo "Build.SourceBranch = $(Build.SourceBranch)"
+    echo "Build.DefinitionName = $(Build.DefinitionName)"
   displayName: 'Test variable group variables (secret and nonsecret)'
   env:
     SYSTEM_ACCESSTOKEN: $(System.AccessToken)
