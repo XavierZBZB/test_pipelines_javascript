@@ -63,13 +63,6 @@ steps:
     echo "Build.RequestedForId = $(Build.RequestedForId)"
     echo "Build.SourceBranch = $(Build.SourceBranch)"
     echo "Build.DefinitionName = $(Build.DefinitionName)"
-    echo "##vso[task.setvariable variable=mySecretVal;issecret=true]secretvalue"
-    echo "mySecretVal = $(mySecretVal)"
-    echo "##vso[task.setvariable variable=myOutputJobVar;isoutput=true]this is the same job too"
 
-     echo "##vso[task.setvariable variable=myJobVar]this is the same job"
-     echo "##vso[task.setvariable variable=myOutputJobVar;isoutput=true]this is the same job too"
-     echo $(myJobVar) 
-     echo $(setOutput.myOutputJobVar)  displayName: 'Test variable group variables (secret and nonsecret)'
   env:
     SYSTEM_ACCESSTOKEN: $(System.AccessToken)
