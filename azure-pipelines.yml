@@ -8,6 +8,11 @@ parameters:
   - ubuntu-latest
   - macOS-latest
 
+- name: vmname
+  values:
+    - momo
+    - CBS-OnPrem
+
 
 trigger: none
 
@@ -15,7 +20,7 @@ jobs:
 - job: build
   displayName: build
   pool: 
-    name: 'CBS-OnPrem'
+    name: ${{ parameters.vmname }}
     vmImage: ${{ parameters.image }}
   steps:
   - script: echo building $(Build.BuildNumber) with ${{ parameters.image }}
