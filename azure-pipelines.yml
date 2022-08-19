@@ -10,7 +10,8 @@ stages:
   jobs:
   - job: A1
     steps:
-     - bash: echo "##vso[task.setvariable variable=myStageVal;isOutput=true]this is a stage output variable"
+     - script: |
+        echo "##vso[task.setvariable variable=myStageVal;isOutput=true]this is a stage output variable"
        name: MyOutputVar
 - stage: B
   dependsOn: A
@@ -19,4 +20,5 @@ stages:
     variables:
       myStageAVar: $[stageDependencies.A.A1.outputs['MyOutputVar.myStageVal']]
     steps:
-      - bash: echo $(myStageAVar)
+      - script: |
+          echo $(myStageAVar)
