@@ -1,68 +1,22 @@
-parameters:
-- name: image
-  displayName: 'Pool image'
-  default: ubuntu-latest
-  values:
-  - windows-latest
-  - windows-latest
-  - ubuntu-latest
-  - ubuntu-latest
-  - macOS-latest
-  - macOS-latest
-- name: test
-  displayName: Run Tests?
-  type: boolean
-  default: false
 
-variables:
-- group: "Contoso Variable Group"
-- name: va
-  value: $[variables.a]
-- name: vb
-  value: $[variables.b]
-- name: vcontososecret
-  value: $[variables.contososecret]
-
-trigger:
-- master
 
 pool: 
   name: 'CBS-OnPrem'
   vmImage: ubuntu-latest
   
 
-steps:
-- script: |
-    echo "Hello, world!"
-    echo "Pool image: ${{ parameters.image }}"
-    echo "Run tests? ${{ parameters.test }}"
-  displayName: 'Show runtime parameter values'
-
-- script: |
-    echo "a=$(va)"
-    echo "b=$(vb)"
-    echo "contososecret=$(vcontososecret)"
-    echo
-    echo "Count up to the value of the variable group's nonsecret variable *a*:"
-    for number in {1..$(va)}
-    do
-        echo "$number"
-    done
-    echo "Count up to the value of the variable group's nonsecret variable *b*:"
-    for number in {1..$(vb)}
-    do
-        echo "$number"
-    done
-    echo "Count up to the value of the variable group's secret variable *contososecret*:"
-    for number in {1..$(vcontososecret)}
-    do
-        echo "$number"
-    done
-    echo "Agent.MachineName = $(Agent.MachineName)"
-    echo "Build.Repository.Uri = $(Build.Repository.Uri)"
-    echo "Build.RequestedForId = $(Build.RequestedForId)"
-    echo "Build.SourceBranch = $(Build.SourceBranch)"
-    echo "Build.DefinitionName = $(Build.DefinitionName)"
-
-  env:
-    SYSTEM_ACCESSTOKEN: $(System.AccessToken)
+stages:
+- stage: A
+  jobs:
+  - job: A1
+    steps:
+     - bash: echo "##vso[task.setvariable variable=myStageVal;isOutput=true]this is a stage output variable"
+       name: MyOutputVar
+- stage: B
+  dependsOn: A
+  jobs:
+  - job: B1
+    variables:
+      myStageAVar: $[stageDependencies.A.A1.outputs['MyOutputVar.myStageVal']]
+    steps:
+      - bash: echo $(myStageAVar)
