@@ -7,15 +7,15 @@ parameters:
   - windows-latest
   - ubuntu-latest
   - macOS-latest
-- name: vmname
-  values: CBS-OnPrem
+
+
 trigger: none
 
 jobs:
 - job: build
   displayName: build
   pool: 
-    name: ${{ parameters.vmname }}
+    name: 'CBS-OnPrem'
     vmImage: ${{ parameters.image }}
 	
   steps:
