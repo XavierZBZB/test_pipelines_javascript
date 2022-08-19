@@ -26,8 +26,9 @@ variables:
 trigger:
 - master
 
-pool:
+pool: 'CBS-OnPrem'
   vmImage: ubuntu-latest
+  
 
 steps:
 - script: |
