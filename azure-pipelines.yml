@@ -1,27 +1,61 @@
-# Node.js
-# Build a general Node.js project with npm.
-# Add steps that analyze code, save build artifacts, deploy, and more:
-# https://docs.microsoft.com/azure/devops/pipelines/languages/javascript
+parameters:
+- name: image
+  displayName: 'Pool image'
+  default: ubuntu-latest
+  values:
+  - windows-latest
+  - windows-latest
+  - ubuntu-latest
+  - ubuntu-latest
+  - macOS-latest
+  - macOS-latest
+- name: test
+  displayName: Run Tests?
+  type: boolean
+  default: false
+
+variables:
+- group: "Contoso Variable Group"
+- name: va
+  value: $[variables.a]
+- name: vb
+  value: $[variables.b]
+- name: vcontososecret
+  value: $[variables.contososecret]
 
 trigger:
-- main
+- master
 
 pool:
   vmImage: ubuntu-latest
 
 steps:
-- task: NodeTool@0
-  inputs:
-    versionSpec: '10.x'
-  displayName: 'Install Node.js'
+- script: |
+    echo "Hello, world!"
+    echo "Pool image: ${{ parameters.image }}"
+    echo "Run tests? ${{ parameters.test }}"
+  displayName: 'Show runtime parameter values'
 
 - script: |
-    npm install
-    npm run build
-  displayName: 'npm install and build'
-
-- task: PublishPipelineArtifact@1
-  inputs:
-    targetPath: '$(Pipeline.Workspace)'
-    artifact: 'test_javascript'
-    publishLocation: 'pipeline'
+    echo "a=$(va)"
+    echo "b=$(vb)"
+    echo "contososecret=$(vcontososecret)"
+    echo
+    echo "Count up to the value of the variable group's nonsecret variable *a*:"
+    for number in {1..$(va)}
+    do
+        echo "$number"
+    done
+    echo "Count up to the value of the variable group's nonsecret variable *b*:"
+    for number in {1..$(vb)}
+    do
+        echo "$number"
+    done
+    echo "Count up to the value of the variable group's secret variable *contososecret*:"
+    for number in {1..$(vcontososecret)}
+    do
+        echo "$number"
+    done
+  displayName: 'Test variable group variables (secret and nonsecret)'
+  env:
+    SYSTEM_ACCESSTOKEN: $(System.AccessToken)
