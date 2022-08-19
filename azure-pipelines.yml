@@ -26,7 +26,8 @@ variables:
 trigger:
 - master
 
-pool: 'CBS-OnPrem'
+pool: 
+  name: 'CBS-OnPrem'
   vmImage: ubuntu-latest
   
 
